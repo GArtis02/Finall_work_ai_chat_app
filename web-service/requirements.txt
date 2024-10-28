@@ -1,2 +1,7 @@
 fastapi
 uvicorn
+openai
+mysql.connector
+numpy
+fuzzywuzzy
+pandas
