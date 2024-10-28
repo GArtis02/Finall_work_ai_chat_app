@@ -4,12 +4,12 @@ import openai
 import random
 import os
 import time
-
+import config
 # Set your OpenAI API key
 # this key has auto-charge disabled, no billing methog assigned, and 5$ in API credits.
 # Ideally, you should use your own OpenAI account, and your own money
 
-openai.api_key = "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"
+openai.api_key = config.OPENAI_API_KEY
 # Define the custom tools
 tools = [
     {   
