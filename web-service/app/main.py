@@ -5,7 +5,9 @@ import random
 import json
 import time
 import config
+import functions 
 
+function.Profession_info()
 app = FastAPI()
 
 # add key
@@ -18,18 +20,13 @@ class Message(BaseModel):
     content: str
 
 
-# Define the tool functions
-def return_string():
-    return ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=5))
+def Profession_info(OriginalPromth):
+    result = functions.Profession_info(OriginalPromth)
+    return
 
-
-def return_integer():
-    return random.randint(0, 9)
-
-
-def return_pokemon():
-    # Dummy Pokemon weakness tool - in a real case, this would return correct weakness types.
-    return "Venusaur is weak to Flying, Psychic, Ice, and Fire types."
+def vacancies_info(OriginalPromth):
+    result = functions.vacancies_info(OriginalPromth)
+    return
 
 
 # Define the custom tools
@@ -37,8 +34,8 @@ tools = [
     {
         "type": "function",
         "function": {
-            "name": "return_string",
-            "description": "Returns a random text string",
+            "name": "Profession_info",
+            "description": "Return information abouth a profesion, how much they work, earn and similar",
             "parameters": {
                 "type": "object",
                 "properties": {},
@@ -49,20 +46,8 @@ tools = [
     {
         "type": "function",
         "function": {
-            "name": "return_integer",
-            "description": "Returns an integer from 0 to 9",
-            "parameters": {
-                "type": "object",
-                "properties": {},
-                "required": []
-            }
-        }
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "return_pokemon",
-            "description": "Returns the types a Pokemon is weak to",
+            "name": "vacancies_info",
+            "description": "Returns information abouth free vacancies in the workmarket",
             "parameters": {
                 "type": "object",
                 "properties": {},
@@ -75,7 +60,7 @@ tools = [
 # 40-mini is the cheapest one.
 assistant = openai.beta.assistants.create(
     name="Custom Tool Assistant",
-    instructions="You are an assistant with access to custom tools that return random strings, integers, pokemon weakness.",
+    instructions="You are an assistant with access to custom tools that returns information abouth open vacansies and information abouth Professions.",
     model="gpt-4o-mini",
     tools=tools
 )
@@ -123,12 +108,10 @@ async def process_message_and_respond(thread_id: str, message: str):
     if run.status == "requires_action":
         if run.required_action:
             for tool_call in run.required_action.submit_tool_outputs.tool_calls:
-                if tool_call.function.name == "return_string":
-                    output = return_string()
-                elif tool_call.function.name == "return_integer":
-                    output = return_integer()
-                elif tool_call.function.name == "return_pokemon":
-                    output = return_pokemon()
+                if tool_call.function.name == "Profession_info":
+                    output = Profession_info(message)
+                elif tool_call.function.name == "vacancies_info":
+                    output = vacancies_info(message)
                 else:
                     output = "Unknown tool"
                 

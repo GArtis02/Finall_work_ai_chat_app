@@ -7,7 +7,7 @@ tools = [
     {
         "type": "function",
         "function": {
-            "name": "vacancies-info",
+            "name": "vacancies_info",
             "description": "Return information about a profession in Latvian from users message, that will be used to search for vacancies in a DB",
             "parameters": {
                 "type": "object",
