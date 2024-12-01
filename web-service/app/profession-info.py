@@ -1,10 +1,11 @@
 # profession_tool.py
 import openai
 import json
-import config
 import sys  # Import sys to allow printing to stderr
 
-openai.api_key = config.OPENAI_API_KEY
+# add key here
+#openai.api_key = 
+
 
 tools = [
     {

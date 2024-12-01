@@ -1,7 +1,9 @@
 import openai
 import json
-import config
-openai.api_key = config.OPENAI_API_KEY
+
+# add key here
+#openai.api_key = 
+
 
 tools = [
     {

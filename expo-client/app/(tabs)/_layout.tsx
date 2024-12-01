@@ -45,6 +45,16 @@ export default function TabLayout() {
         }}
       />
 
+      {/* Add the new Settings tab */}
+      <Tabs.Screen
+        name="SettingsScreen"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'settings' : 'settings-outline'} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

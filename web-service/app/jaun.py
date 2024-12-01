@@ -1,15 +1,11 @@
-# @title Noklusējuma nosaukuma teksts
 import json
 import openai
 import random
 import os
 import time
-import config
-# Set your OpenAI API key
-# this key has auto-charge disabled, no billing methog assigned, and 5$ in API credits.
-# Ideally, you should use your own OpenAI account, and your own money
 
-openai.api_key = config.OPENAI_API_KEY
+
+# key here openai.api_key = 
 # Define the custom tools
 tools = [
     {   

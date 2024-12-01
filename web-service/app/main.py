@@ -4,14 +4,24 @@ import openai
 import random
 import json
 import time
-import config
 import functions 
+import logging
 
-function.Profession_info()
+# Configure the logging
+logging.basicConfig(
+    level=logging.INFO,  # Set the logging level
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  # Log message format
+    handlers=[
+        logging.FileHandler("app.log"),  # Log to a file named 'app.log'
+        logging.StreamHandler()  # Log to the console
+    ]
+)
+
 app = FastAPI()
 
-# add key
-openai.api_key = config.OPENAI_API_KEY
+# add key here
+#openai.api_key = 
+
 
 
 # Model for a single message
@@ -22,11 +32,11 @@ class Message(BaseModel):
 
 def Profession_info(OriginalPromth):
     result = functions.Profession_info(OriginalPromth)
-    return
+    return result
 
 def vacancies_info(OriginalPromth):
     result = functions.vacancies_info(OriginalPromth)
-    return
+    return result
 
 
 # Define the custom tools
@@ -66,8 +76,9 @@ assistant = openai.beta.assistants.create(
 )
 
 # Route to receive and process a user message
-@app.post("/send-message/")
+@app.get("/send-message/")
 async def process_message_and_respond(thread_id: str, message: str):
+    logging.info(f"Received request: {thread_id} {message}")
     """
     Receive a message from the user and return a response from the virtual assistant.
 
