@@ -1,134 +1,3 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-import logging
-
-import json
-import os
-import sys
-
-base_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(base_dir, "vakances_cleaned_enriched.json")
-
-# Configure the logging
-logging.basicConfig(
-    level=logging.DEBUG,  # Set to DEBUG for detailed logs
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler("app.log", encoding="utf-8"),  # File handler with UTF-8 encoding
-        logging.StreamHandler(sys.stdout)  # Stream handler
-    ]
-)
-
-app = FastAPI()
-
-# Endpoint models
-class JobQuery(BaseModel):
-    query: str
-
-# Global variable for vacancies
-all_vacancies = []
-
-# Load and preprocess vacancies on startup
-@app.on_event("startup")
-async def load_vacancies():
-    global all_vacancies
-    try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            all_vacancies = preprocess_vacancies(json.load(f))
-        logging.info(f"Vacancies loaded and preprocessed successfully. Total: {len(all_vacancies)}")
-        # logging.error(f,all_vacancies)
-    except Exception as e:
-        logging.error(f"Error loading vacancies: {e}")
-        all_vacancies = []
-        # logging.error(f,all_vacancies)
-
-# API endpoint to filter job vacancies based on query
-@app.post("/filter-vacancies/")
-async def filter_job_vacancies(job_query: JobQuery):
-    try:
-        # Extract search parameters from user query
-        extracted_params = extract_search_params_dynamically(job_query.query)
-        logging.info(f"Extracted search parameters: {extracted_params}")
-
-        # Filter the vacancies
-        filtered_vacancies = filter_vacancies(all_vacancies, extracted_params)
-        logging.info(f"Filtered {len(filtered_vacancies)} vacancies from the dataset.")
-
-        # Create a final response
-        final_response = create_final_response(filtered_vacancies)
-        return {"query": job_query.query, "response": final_response}
-    except Exception as e:
-        logging.error(f"Error processing the job query: {e}")
-        raise HTTPException(status_code=500, detail="An error occurred while processing the job query.")
-
-# API endpoint to handle sending messages
-@app.get("/send-message/")
-async def send_message(thread_id: int, message: str):
-    try:
-        logging.info(f"Message received for thread {thread_id}: {message}")
-
-        if not thread_id or not isinstance(thread_id, int):
-            logging.error("Invalid thread_id provided.")
-            raise HTTPException(status_code=400, detail="Invalid thread_id.")
-        
-        if not message.strip():
-            logging.error("Empty message received.")
-            raise HTTPException(status_code=400, detail="Message cannot be empty.")
-
-        # Extract search parameters
-        extracted_params = extract_search_params_dynamically(message)
-        logging.debug(f"Extracted parameters: {extracted_params}")
-
-        if not extracted_params:
-            logging.warning("No search parameters extracted.")
-            return {
-                "status": "error",
-                "message": "Could not extract search parameters. Check message format.",
-                "filtered_vacancies": [],
-            }
-
-        # Filter vacancies
-        logging.debug(f"All vacancies dataset size: {len(all_vacancies)}")
-        filtered_vacancies = filter_vacancies(all_vacancies, extracted_params)
-        logging.info(f"Filtered {len(filtered_vacancies)} vacancies.")
-
-        if not filtered_vacancies:
-            logging.info("No vacancies matched the criteria.")
-            response = {
-                "status": "success",
-                "thread_id": thread_id,
-                "original_message": message,
-                "response": "Nav atrastas vakances",
-            }
-            logging.debug(f"Response payload: {response}")
-            return response
-
-        # Create response
-        final_response = create_final_response(filtered_vacancies)
-        response = {
-            "status": "success",
-            "thread_id": thread_id,
-            "original_message": message,
-            "response": final_response,  # Use 'response' as the key for consistency
-
-        }
-        logging.debug(f"Response payload: {response}")
-
-        return response
-
-    except ValueError as ve:
-        logging.error(f"ValueError: {ve}")
-        raise HTTPException(status_code=400, detail=str(ve))
-    except Exception as e:
-        logging.error(f"Unhandled exception: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error.")
-
-# Example route to test server
-@app.get("/")
-async def root():
-    return {"message": "Job Vacancy API is running"}
-
-
 import json
 from fuzzywuzzy import fuzz
 
@@ -270,11 +139,11 @@ def create_final_response(filtered_vacancies):
 # Example usage
 if __name__ == "__main__":
     # User query example
-    user_query = "Find jobs with pay higher then 500."
+    user_query = "Find jobs in Rīga in Transports / Loģistika."
     extracted_data = extract_search_params_dynamically(user_query)
 
     # Load the data (replace with your data file path)
-    with open("vakances_cleaned_enriched.json", "r", encoding="utf-8") as f:
+    with open("web-service/app/vakances_cleaned_enriched.json", "r", encoding="utf-8") as f:
         all_vacancies = json.load(f)
 
     # Preprocess vacancies
