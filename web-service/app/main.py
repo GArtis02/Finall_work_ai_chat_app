@@ -123,11 +123,6 @@ async def send_message(thread_id: int, message: str):
         logging.error(f"Unhandled exception: {e}")
         raise HTTPException(status_code=500, detail="Internal server error.")
 
-# Example route to test server
-@app.get("/")
-async def root():
-    return {"message": "Job Vacancy API is running"}
-
 
 import json
 from fuzzywuzzy import fuzz
