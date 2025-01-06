@@ -1,5 +1,9 @@
 ## Purpose
-This is a web service skeleton app, built with FastAPI.
+This project is a FastAPI-based backend service designed to filter job vacancies based on user queries. It leverages OpenAI's GPT models for dynamic query parameter extraction and fuzzy matching techniques for improved search accuracy.
+
+## Example 
+    "query": "Find jobs with pay higher than 1000 in Riga.",
+    "response": "Atrastas 5 vakances Rīgā ar algu virs 1000 EUR."
 
 ## Project structure
 ```
@@ -8,15 +12,12 @@ web-service/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py         # Main web service file
-│   └── models.py       # Database models for messages and conversation (optional, for the future)
+│   └── vakances_cleaned_enriched.json      # Stored vacancies 
 │
 ├── .gitignore          # Add filenames you do not want to be added to your repository here
 ├── requirements.txt    # Dependencies
 └── README.md           # The file you are reading right now :)
 ```
-
-## Project setup
-Use the setup .bat file from the scripts folder.
 
 ### Activate environment
 Linux:  

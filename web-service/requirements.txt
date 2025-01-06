@@ -1,7 +1,6 @@
-fastapi
-uvicorn
+fastapi 
+uvicorn 
+pydantic 
+fuzzywuzzy 
+python-levenshtein 
 openai
-mysql.connector
-numpy
-fuzzywuzzy
-pandas

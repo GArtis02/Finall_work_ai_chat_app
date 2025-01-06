@@ -1,13 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import logging
-
 import json
 import os
 import sys
-
-base_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(base_dir, "vakances_cleaned_enriched.json")
+from fuzzywuzzy import fuzz
+import openai
 
 # Configure the logging
 logging.basicConfig(
@@ -18,6 +16,9 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout)  # Stream handler
     ]
 )
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(base_dir, "vakances_cleaned_enriched.json")
 
 app = FastAPI()
 
@@ -36,11 +37,9 @@ async def load_vacancies():
         with open(file_path, "r", encoding="utf-8") as f:
             all_vacancies = preprocess_vacancies(json.load(f))
         logging.info(f"Vacancies loaded and preprocessed successfully. Total: {len(all_vacancies)}")
-        # logging.error(f,all_vacancies)
     except Exception as e:
         logging.error(f"Error loading vacancies: {e}")
         all_vacancies = []
-        # logging.error(f,all_vacancies)
 
 # API endpoint to filter job vacancies based on query
 @app.post("/filter-vacancies/")
@@ -110,7 +109,6 @@ async def send_message(thread_id: int, message: str):
             "thread_id": thread_id,
             "original_message": message,
             "response": final_response,  # Use 'response' as the key for consistency
-
         }
         logging.debug(f"Response payload: {response}")
 
@@ -123,13 +121,8 @@ async def send_message(thread_id: int, message: str):
         logging.error(f"Unhandled exception: {e}")
         raise HTTPException(status_code=500, detail="Internal server error.")
 
-
-import json
-from fuzzywuzzy import fuzz
-
 # Function to extract search parameters dynamically
 def extract_search_params_dynamically(user_query):
-    import openai
     openai.api_key = ""
 
     prompt = f"""
@@ -153,7 +146,7 @@ def extract_search_params_dynamically(user_query):
     }}
     """
     
-    completion = openai.chat.completions.create(
+    completion = openai.ChatCompletion.create(
         model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
@@ -240,9 +233,7 @@ def create_final_response(filtered_vacancies):
     Use OpenAI to form a final response based on the filtered vacancies.
     The response might summarize the number of found vacancies and list some details.
     """
-    import openai
     openai.api_key = ""
-
 
     # Create a prompt with the filtered results
     prompt = f"""
@@ -253,7 +244,7 @@ def create_final_response(filtered_vacancies):
     If there are too many, just provide a short summary and the count.
     """
     
-    completion = openai.chat.completions.create(
+    completion = openai.ChatCompletion.create(
         model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
