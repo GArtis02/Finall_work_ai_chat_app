@@ -1077,3 +1077,16 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 2025-01-05 13:21:47,350 - openai._base_client - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers({'date': 'Sun, 05 Jan 2025 11:21:47 GMT', 'content-type': 'application/json', 'transfer-encoding': 'chunked', 'connection': 'keep-alive', 'access-control-expose-headers': 'X-Request-ID', 'openai-organization': 'user-usgp4zwgqjt1rnhztbgsuaup', 'openai-processing-ms': '8605', 'openai-version': '2020-10-01', 'x-ratelimit-limit-requests': '10000', 'x-ratelimit-limit-tokens': '200000', 'x-ratelimit-remaining-requests': '9998', 'x-ratelimit-remaining-tokens': '199702', 'x-ratelimit-reset-requests': '16.688s', 'x-ratelimit-reset-tokens': '89ms', 'x-request-id': 'req_cc2ec3d8e9f198fcc9daa88620ee132d', 'strict-transport-security': 'max-age=31536000; includeSubDomains; preload', 'cf-cache-status': 'DYNAMIC', 'x-content-type-options': 'nosniff', 'server': 'cloudflare', 'cf-ray': '8fd31602c884e4e8-RIX', 'content-encoding': 'gzip', 'alt-svc': 'h3=":443"; ma=86400'})
 2025-01-05 13:21:47,350 - openai._base_client - DEBUG - request_id: req_cc2ec3d8e9f198fcc9daa88620ee132d
 2025-01-05 13:21:47,351 - root - DEBUG - Response payload: {'status': 'success', 'thread_id': 123456, 'original_message': 'Jobs in Liepājā ', 'response': 'Šobrīd pieejamas divas vakances valsts pārvaldē Liepājā:\n\n1. **IESLODZĪJUMA VIETAS VECĀKAIS INSPEKTORS**\n   - Alga: no 1340 EUR līdz 1520 EUR\n   - Darba slodze: viena vesela slodze\n   - Darba laiks: normālais darba laiks\n   - Atrašanās vieta: Dārza iela 14/16, Liepāja\n   - [Pieteikties šeit](https://cvvp.nva.gov.lv/#/pub/vakances/394760533)\n\n2. **TIESNEŠA PALĪGS**\n   - Alga: no 1375 EUR līdz 1459 EUR\n   - Darba slodze: viena vesela slodze\n   - Darba laiks: normālais darba laiks\n   - Atrašanās vieta: Lielā iela 4, Liepāja\n   - [Pieteikties šeit](https://cvvp.nva.gov.lv/#/pub/vakances/398036994)\n\nKopā ir pieejamas 2 vakances.'}
+2025-01-07 18:54:09,633 - root - INFO - Vacancies loaded and preprocessed successfully. Total: 388
+2025-01-07 18:59:55,372 - root - INFO - Vacancies loaded and preprocessed successfully. Total: 388
+2025-01-07 19:02:47,243 - root - INFO - Message received for thread 123456: Darba vakances Liepājā
+2025-01-07 19:02:47,244 - root - ERROR - Unhandled exception: 
+
+You tried to access openai.ChatCompletion, but this is no longer supported in openai>=1.0.0 - see the README at https://github.com/openai/openai-python for the API.
+
+You can run `openai migrate` to automatically upgrade your codebase to use the 1.0.0 interface. 
+
+Alternatively, you can pin your installation to the old version, e.g. `pip install openai==0.28`
+
+A detailed migration guide is available here: https://github.com/openai/openai-python/discussions/742
+

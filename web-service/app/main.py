@@ -146,7 +146,7 @@ def extract_search_params_dynamically(user_query):
     }}
     """
     
-    completion = openai.ChatCompletion.create(
+    completion = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
@@ -244,7 +244,7 @@ def create_final_response(filtered_vacancies):
     If there are too many, just provide a short summary and the count.
     """
     
-    completion = openai.ChatCompletion.create(
+    completion = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
